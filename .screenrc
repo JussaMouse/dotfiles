@@ -1,0 +1,14 @@
+hardstatus off
+caption always "%{=5}%S%{=7}%=%{=7}%-w%{=7}*%n %t%{-}%{=7}%+w%{-}%=%Y-%m-%d %c%{-}"
+
+# Ensure F1/F2 are recognized on xterm/iTerm2
+termcapinfo xterm*|xterms*|xterm-256color k1=\EOP:k2=\EOQ
+
+# F1/F2 for prev/next window (no prefix)
+bindkey -k k1 prev
+bindkey -k k2 next
+# Raw sequences (fallbacks for terminals that don't expose k1/k2)
+bindkey "\033OP" prev
+bindkey "\033OQ" next
+bindkey "\033[11~" prev
+bindkey "\033[12~" next
