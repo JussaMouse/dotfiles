@@ -1,14 +1,44 @@
-hardstatus off
-caption always "%{=5}%S%{=7}%=%{=7}%-w%{=7}*%n %t%{-}%{=7}%+w%{-}%=%Y-%m-%d %c%{-}"
+# we use vim-like commands. pref | to divide. pref h/j/k/l to change region, pref H/L to tab through windows
+hardstatus alwayslastline "%{=5}%S%{=7}%=%{=7}%-w%{=7}*%n %{=2}%t%{=7}%{-}%{=7}%+w%{-}%=%Y-%m-%d %c%{-}"
+caption off
+defscrollback 100000
+startup_message off
+vbell on
+vbell_msg ""
 
-# Ensure F1/F2 are recognized on xterm/iTerm2
-termcapinfo xterm*|xterms*|xterm-256color k1=\EOP:k2=\EOQ
+# Rapid config iteration: Ctrl-a r reloads this test config.
+bind r source $HOME/.screenrc-test
+
+# Split and auto-populate the new region with the adjacent window.
+bind S eval "split" "focus" "next"
+bind | eval "split -v" "focus" "next"
+
+# Ensure F1-F4 are recognized across common terminal TERM names.
+termcapinfo xterm*|xterms*|xterm-256color|screen*|tmux*|wezterm|alacritty|rxvt* k1=\EOP:k2=\EOQ:k3=\EOR:k4=\EOS
 
 # F1/F2 for prev/next window (no prefix)
 bindkey -k k1 prev
 bindkey -k k2 next
-# Raw sequences (fallbacks for terminals that don't expose k1/k2)
-bindkey "\033OP" prev
-bindkey "\033OQ" next
-bindkey "\033[11~" prev
-bindkey "\033[12~" next
+# F3/F4 for region navigation (equivalent to Ctrl-a Tab)
+bindkey -k k3 eval "focus"
+bindkey -k k4 eval "focus"
+
+# Vim-style region focus navigation.
+bind h focus left
+bind j focus down
+bind k focus up
+bind l focus right
+
+# Vim-style window navigation.
+bind H prev
+bind L next
+
+# Vim-style split management.
+bind s split
+bind v split -v
+bind x remove
+bind o only
+
+# Alt-h / Alt-l send Ctrl-a h/l.
+bindkey -t "\033h" stuff "\001h"
+bindkey -t "\033l" stuff "\001l"
